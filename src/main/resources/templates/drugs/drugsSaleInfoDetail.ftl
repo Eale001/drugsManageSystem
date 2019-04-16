@@ -17,11 +17,11 @@
 
 <div class="row" style="padding-top: 10px;">
     <div class="col-md-2">
-        <h1 style="font-size: 24px; margin: 0;" class="">品牌管理</h1>
+        <h1 style="font-size: 24px; margin: 0;" class="">销售管理</h1>
     </div>
     <div class="col-md-10 text-right">
         <a href="##"><span class="glyphicon glyphicon-home"></span> 首页</a> > <a
-            disabled="disabled">品牌管理</a>
+            disabled="disabled">销售管理</a>
     </div>
 </div>
 <div class="row" style="padding-top: 15px;">
@@ -38,7 +38,7 @@
                 </h3>
             </div>
             <!--盒子身体-->
-            <form action="/brandEdit" method="post" onsubmit="return check();">
+            <form action="/saveDrugSaleInfo" method="post" onsubmit="return check();">
                 <div class="box-body no-padding">
                     <div class="box-body">
                         <!--錯誤信息提示  -->
@@ -51,24 +51,35 @@
 
                             <div class="col-md-6 form-group">
                                 <label>
-                                    <span id="ctl00_cphMain_Label1">品牌名称</span>
+                                    <span id="ctl00_cphMain_Label1">药品名称</span>
                                 </label>
-                                <input name="brandName" type="text" value="${(brand.brandName)!''}" class="form-control"/>
-                                <input name="brandId" type="text" value="${(brand.brandId)!''}" hidden="hidden"/>
+
+                                <select class="form-control" name="drugsId" readonly>
+                                        <option value="${(drugs.drugsId)!''}">${(drugs.drugsName)!''}</option>
+                                </select>
+
+                            </div>
+
+                            <div class="col-md-6 form-group">
+                                <label>
+                                    <span id="ctl00_cphMain_Label1">销售数量</span>
+                                </label>
+                                <input name="saleinfoNumber" type="text" value="${(drugSaleInfo.drugSaleInfo.saleinfoNumber)!''}" class="form-control" readonly/>
+                                <input name="saleinfoId" type="text" value="${(drugSaleInfo.drugSaleInfo.saleinfoId)!''}" hidden="hidden"/>
                             </div>
                             <div class="col-md-6 form-group">
                                 <label>
-                                    <span id="ctl00_cphMain_Label2">品牌成立年限</span>
+                                    <span id="ctl00_cphMain_Label2">销售价格</span>
                                 </label>
-                                <input name="brandYeaes" type="text" value="${(brand.brandYeaes)!''}"
-                                       style="background-color:#fff;" class="form-control"/>
+                                <input name="saleinfoPrice" type="text" value="${(drugSaleInfo.drugSaleInfo.saleinfoPrice)!''}"
+                                       style="background-color:#fff;" class="form-control" readonly/>
                             </div>
                             <div class="col-md-6 form-group">
                                 <label>
-                                    <span id="ctl00_cphMain_Label3">品牌评价</span>
+                                    <span id="ctl00_cphMain_Label2">销售人员</span>
                                 </label>
-                                <input name="brandComment" type="text" value="${(brand.brandComment)!''}"
-                                       style="background-color:#fff;" class="form-control"/>
+                                <input name="saleUserid" type="text" value="${(user.userName)!''}"
+                                       style="background-color:#fff;" class="form-control" readonly/>
                             </div>
 
                         </div>
@@ -76,8 +87,8 @@
                 </div>
                 <!--盒子尾-->
                 <div class="box-footer">
-                    <input class="btn btn-primary" id="save" type="submit" value="保存"/>
-                    <input class="btn btn-default" id="cancel" type="button" value="取消"
+                    <#--<input class="btn btn-primary" id="save" type="submit" value="保存"/>-->
+                    <input class="btn btn-default" id="cancel" type="button" value="返回"
                            onclick="window.history.back();"/>
                 </div>
             </form>

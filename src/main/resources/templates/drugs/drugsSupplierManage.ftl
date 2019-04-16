@@ -39,11 +39,11 @@
 </style>
 <div class="row" style="padding-top: 10px;">
     <div class="col-md-2">
-        <h1 style="font-size: 24px; margin: 0;" class="">评论管理</h1>
+        <h1 style="font-size: 24px; margin: 0;" class="">供应商管理</h1>
     </div>
     <div class="col-md-10 text-right">
         <a href="##"><span class="glyphicon glyphicon-home"></span> 首页</a> > <a
-            disabled="disabled">评论管理</a>
+            disabled="disabled">供应商管理</a>
     </div>
 </div>
 <div class="row" style="padding-top: 15px;">
@@ -53,7 +53,7 @@
             <!--盒子头-->
             <div class="box-header">
                 <h3 class="box-title">
-                    <a href="#" class="label label-success" style="padding: 5px;">
+                    <a href="/findDrugSupplierById" class="label label-success" style="padding: 5px;">
                         <span class="glyphicon glyphicon-plus"></span> 新增
                     </a>
                 </h3>
@@ -74,31 +74,34 @@
                     <table class="table table-hover ">
                         <tr>
 
-                            <th scope="col">订单ID</th>
-                            <th scope="col">订单车辆</th>
-                            <th scope="col">服务满意度</th>
-                            <th scope="col">评价</th>
-                            <th scope="col">状态</th>
+                            <th scope="col">供应商名称</th>
+                            <th scope="col">联系地址</th>
+                            <th scope="col">联系电话</th>
+                            <th scope="col">备注</th>
+                            <th scope="col">录入时间</th>
+                            <th scope="col">录入人员</th>
                             <th scope="col">操作</th>
                         </tr>
-						<#list commentList as item>
+						<#list drgusVOSList as item>
 						<tr>
-                            <td><span>${item.order.orderId}</span></td>
-                            <td><span>${item.order.vehicle.vehicleName}</span></td>
+                            <td><span>${(item.drugSupplier.supplierName)!''}</span></td>
+                            <td><span>${(item.drugSupplier.supplierAddress)!''}</span></td>
+                            <td><span>${(item.drugSupplier.supplierPhone)!''}</span></td>
+                            <td><span>${(item.drugSupplier.supplierRemark)!''}</span></td>
+                            <td><span>${(item.drugSupplier.createDate)!''}</span></td>
+                            <td><span>${(item.userName)!''}</span></td>
 							<#--<#if item.brandYeaes??>-->
 								<#--<td><span>${item.brandYeaes}</span></td>-->
                             <#--<#else>-->
 								 <#--<td><span>0</span></td>-->
                             <#--</#if>-->
-                            <td><span>${item.satisfaction}</span></td>
-                            <td><span>${item.comment}</span></td>
-                            <td><span>${item.commentState}</span></td>
+                            <#--<td><span>${item.brandComment}</span></td>-->
                             <td>
-                                <a href="/find?commentId=${item.commentId}" class="label xiugai">
+                                <a href="/goDrugsSupplierDetail?supplierId=${item.drugSupplier.supplierId}" class="label xiugai">
                                     <span class="glyphicon glyphicon-edit"></span> 查看</a>
-                                <a href="/find?commentId=${item.commentId}" class="label xiugai">
+                                <a href="/findDrugSupplierById?supplierId=${item.drugSupplier.supplierId}" class="label xiugai">
                                     <span class="glyphicon glyphicon-edit"></span> 修改</a>
-                                <a href="/removeComment?commentId=${item.commentId}" onclick="{return confirm('删除该记录将不能恢复，确定删除吗？');};"
+                                <a href="/deleteDrugSupplierById?supplierId=${item.drugSupplier.supplierId}" onclick="{return confirm('删除该记录将不能恢复，确定删除吗？');};"
                                    class="label shanchu"><span
                                         class="glyphicon glyphicon-remove"></span> 删除</a></td>
                         </tr>
@@ -113,7 +116,7 @@
     </div>
 </div>
 <script>
-    $(function () {
+    <#--$(function () {-->
 
         <#--$('.baseKetsubmit').on('click', function () {-->
             <#--var baseKey = $('.baseKey').val();-->
@@ -125,7 +128,7 @@
             <#--$(".thistable").load("roleser", {val: con});-->
         <#--});-->
 
-    });
+    <#--});-->
 </script>
 
 

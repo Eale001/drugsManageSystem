@@ -17,6 +17,8 @@ public class DrgusVO {
 
     private DrugSaleInfo drugSaleInfo;
 
+    private DrugCate drugCate;
+
     private String userName;
 
     public DrgusVO() {
@@ -68,6 +70,14 @@ public class DrgusVO {
 
     public void setDrugSaleInfo(DrugSaleInfo drugSaleInfo) {
         this.drugSaleInfo = drugSaleInfo;
+    }
+
+    public DrugCate getDrugCate() {
+        return drugCate;
+    }
+
+    public void setDrugCate(DrugCate drugCate) {
+        this.drugCate = drugCate;
     }
 
     public String getUserName() {

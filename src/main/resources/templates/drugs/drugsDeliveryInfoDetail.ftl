@@ -95,11 +95,11 @@
                     </div>
                 </div>
                 <!--盒子尾-->
-                <#--<div class="box-footer">-->
+                <div class="box-footer">
                     <#--<input class="btn btn-primary" id="save" type="submit" value="保存"/>-->
-                    <#--<input class="btn btn-default" id="cancel" type="button" value="取消"-->
-                           <#--onclick="window.history.back();"/>-->
-                <#--</div>-->
+                    <input class="btn btn-default" id="cancel" type="button" value="返回"
+                           onclick="window.history.back();"/>
+                </div>
             </form>
         </div>
     </div>

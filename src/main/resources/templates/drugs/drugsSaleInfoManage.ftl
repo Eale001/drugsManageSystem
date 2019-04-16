@@ -79,7 +79,7 @@
                             <th scope="col">销售数量</th>
                             <th scope="col">销售价格</th>
                             <th scope="col">出库时间</th>
-                            <th scope="col">操作员</th>
+                            <th scope="col">销售人员</th>
                             <th scope="col">操作</th>
                         </tr>
 						<#list drgusVOSList as item>

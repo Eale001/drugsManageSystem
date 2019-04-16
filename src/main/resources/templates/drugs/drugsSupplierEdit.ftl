@@ -17,11 +17,11 @@
 
 <div class="row" style="padding-top: 10px;">
     <div class="col-md-2">
-        <h1 style="font-size: 24px; margin: 0;" class="">车类型管理</h1>
+        <h1 style="font-size: 24px; margin: 0;" class="">供应商管理</h1>
     </div>
     <div class="col-md-10 text-right">
         <a href="##"><span class="glyphicon glyphicon-home"></span> 首页</a> > <a
-            disabled="disabled">车类型管理</a>
+            disabled="disabled">供应商管理</a>
     </div>
 </div>
 <div class="row" style="padding-top: 15px;">
@@ -38,7 +38,7 @@
                 </h3>
             </div>
             <!--盒子身体-->
-            <form action="/typeEdit" method="post" onsubmit="return check();">
+            <form action="/saveDrugSupplier" method="post" onsubmit="return check();">
                 <div class="box-body no-padding">
                     <div class="box-body">
                         <!--錯誤信息提示  -->
@@ -51,17 +51,38 @@
 
                             <div class="col-md-6 form-group">
                                 <label>
-                                    <span id="ctl00_cphMain_Label1">车类型名称</span>
+                                    <span id="ctl00_cphMain_Label1">供应商名称</span>
                                 </label>
-                                <input name="typeName" type="text" value="${(type.typeName)!''}" class="form-control"/>
-                                <input name="typeId" type="text" value="${(type.typeId)!''}" hidden="hidden"/>
+                                <input name="supplierName" type="text" value="${(drugSupplier.supplierName)!''}" class="form-control"/>
+                                <input name="supplierId" type="text" value="${(drugSupplier.supplierId)!''}" hidden="hidden"/>
                             </div>
                             <div class="col-md-6 form-group">
                                 <label>
-                                    <span id="ctl00_cphMain_Label2">车类型简介</span>
+                                    <span id="ctl00_cphMain_Label2">联系地址</span>
                                 </label>
-                                <input name="typeRemark" type="text" value="${(type.typeRemark)!''}"
+                                <input name="supplierAddress" type="text" value="${(drugSupplier.supplierAddress)!''}"
                                        style="background-color:#fff;" class="form-control"/>
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label>
+                                    <span id="ctl00_cphMain_Label2">联系电话</span>
+                                </label>
+                                <input name="supplierPhone" type="text" value="${(drugSupplier.supplierPhone)!''}"
+                                       style="background-color:#fff;" class="form-control"/>
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label>
+                                    <span id="ctl00_cphMain_Label2">备注</span>
+                                </label>
+                                <input name="supplierPhone" type="text" value="${(drugSupplier.supplierRemark)!''}"
+                                       style="background-color:#fff;" class="form-control"/>
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label>
+                                    <span id="ctl00_cphMain_Label2">录入人员</span>
+                                </label>
+                                <input name="createUserid" type="text" value="${(user.userName)!''}"
+                                       style="background-color:#fff;" class="form-control" readonly/>
                             </div>
 
                         </div>

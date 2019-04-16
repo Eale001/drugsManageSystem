@@ -17,11 +17,11 @@
 
 <div class="row" style="padding-top: 10px;">
     <div class="col-md-2">
-        <h1 style="font-size: 24px; margin: 0;" class="">评论管理</h1>
+        <h1 style="font-size: 24px; margin: 0;" class="">药品管理</h1>
     </div>
     <div class="col-md-10 text-right">
         <a href="##"><span class="glyphicon glyphicon-home"></span> 首页</a> > <a
-            disabled="disabled">评论管理</a>
+            disabled="disabled">药品管理</a>
     </div>
 </div>
 <div class="row" style="padding-top: 15px;">
@@ -38,7 +38,7 @@
                 </h3>
             </div>
             <!--盒子身体-->
-            <form action="/modifyComment" method="post" onsubmit="return check();">
+            <form action="/saveDrugs" method="post" onsubmit="return check();">
                 <div class="box-body no-padding">
                     <div class="box-body">
                         <!--錯誤信息提示  -->
@@ -51,42 +51,48 @@
 
                             <div class="col-md-6 form-group">
                                 <label>
-                                    <span id="ctl00_cphMain_Label1">订单ID</span>
+                                    <span id="ctl00_cphMain_Label1">药品类别</span>
                                 </label>
-                                <#--<input name="order.orderId" type="text" value="${(comment.order.orderId)!''}" class="form-control"/>-->
-                                <select class="form-control" name="orderId">
-							        <#list orderList as order>
-                                        <option value="${(order.orderId)!''}">${(order.orderId)!''}</option>
-                                    </#list>
+                                <select class="form-control" name="cateId" readonly>
+                                        <option value="${(drugsCate.cateId)!''}">${(drugsCate.cateName)!''}</option>
                                 </select>
-                                <input name="commentId" type="text" value="${(comment.commentId)!''}" hidden="hidden"/>
+
+                            </div>
+
+                            <div class="col-md-6 form-group">
+                                <label>
+                                    <span id="ctl00_cphMain_Label1">药品名称</span>
+                                </label>
+                                <input name="drugsName" type="text" value="${(drugs.drugs.drugsName)!''}" class="form-control" readonly/>
+                                <input name="drugsId" type="text" value="${(drugs.drugs.drugsId)!''}" hidden="hidden"/>
                             </div>
                             <div class="col-md-6 form-group">
                                 <label>
-                                    <span id="ctl00_cphMain_Label1">订单车辆</span>
+                                    <span id="ctl00_cphMain_Label2">价格</span>
                                 </label>
-                                <input name="vehicleId" type="text" value="${(comment.order.vehicle.vehicleName)!''}" class="form-control"/>
+                                <input name="drugsPrice" type="text" value="${(drugs.drugs.drugsPrice)!''}"
+                                       style="background-color:#fff;" class="form-control" readonly/>
                             </div>
                             <div class="col-md-6 form-group">
                                 <label>
-                                    <span id="ctl00_cphMain_Label2">服务满意度</span>
+                                    <span id="ctl00_cphMain_Label2">说明</span>
                                 </label>
-                                <input name="satisfaction" type="text" value="${(comment.satisfaction)!''}"
-                                       style="background-color:#fff;" class="form-control"/>
+                                <input name="drugsRemark" type="text" value="${(drugs.drugs.drugsRemark)!''}"
+                                       style="background-color:#fff;" class="form-control" readonly/>
                             </div>
                             <div class="col-md-6 form-group">
                                 <label>
-                                    <span id="ctl00_cphMain_Label2">评价</span>
+                                    <span id="ctl00_cphMain_Label2">图片</span>
                                 </label>
-                                <input name="comment" type="text" value="${(comment.comment)!''}"
-                                       style="background-color:#fff;" class="form-control"/>
+                                <input name="drugsPicture" type="text" value="${(drugs.drugs.drugsPicture)!''}"
+                                       style="background-color:#fff;" class="form-control" readonly/>
                             </div>
                             <div class="col-md-6 form-group">
                                 <label>
-                                    <span id="ctl00_cphMain_Label3">状态</span>
+                                    <span id="ctl00_cphMain_Label2">录入人员</span>
                                 </label>
-                                <input name="commentState" type="text" value="${(comment.commentState)!''}"
-                                       style="background-color:#fff;" class="form-control"/>
+                                <input name="createUserid" type="text" value="${(user.userName)!''}"
+                                       style="background-color:#fff;" class="form-control" readonly/>
                             </div>
 
                         </div>
@@ -94,7 +100,7 @@
                 </div>
                 <!--盒子尾-->
                 <div class="box-footer">
-                    <input class="btn btn-primary" id="save" type="submit" value="保存"/>
+                    <#--<input class="btn btn-primary" id="save" type="submit" value="保存"/>-->
                     <input class="btn btn-default" id="cancel" type="button" value="取消"
                            onclick="window.history.back();"/>
                 </div>

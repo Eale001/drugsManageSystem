@@ -17,11 +17,11 @@
 
 <div class="row" style="padding-top: 10px;">
     <div class="col-md-2">
-        <h1 style="font-size: 24px; margin: 0;" class="">类别管理</h1>
+        <h1 style="font-size: 24px; margin: 0;" class="">药品管理</h1>
     </div>
     <div class="col-md-10 text-right">
         <a href="##"><span class="glyphicon glyphicon-home"></span> 首页</a> > <a
-            disabled="disabled">类别管理</a>
+            disabled="disabled">药品管理</a>
     </div>
 </div>
 <div class="row" style="padding-top: 15px;">
@@ -38,7 +38,7 @@
                 </h3>
             </div>
             <!--盒子身体-->
-            <form action="/saveDrugCate" method="post" onsubmit="return check();">
+            <form action="/saveDrugs" method="post" onsubmit="return check();">
                 <div class="box-body no-padding">
                     <div class="box-body">
                         <!--錯誤信息提示  -->
@@ -51,10 +51,43 @@
 
                             <div class="col-md-6 form-group">
                                 <label>
-                                    <span id="ctl00_cphMain_Label1">类别名称</span>
+                                    <span id="ctl00_cphMain_Label1">药品类别</span>
                                 </label>
-                                <input name="cateName" type="text" value="${(drugscate.cateName)!''}" class="form-control"/>
-                                <input name="cateId" type="text" value="${(drugscate.cateId)!''}" hidden="hidden"/>
+                                <select class="form-control" name="cateId">
+							        <#list drugsCateList as drugsCate>
+                                        <option value="${(drugsCate.cateId)!''}">${(drugsCate.cateName)!''}</option>
+                                    </#list>
+                                </select>
+
+                            </div>
+
+                            <div class="col-md-6 form-group">
+                                <label>
+                                    <span id="ctl00_cphMain_Label1">药品名称</span>
+                                </label>
+                                <input name="drugsName" type="text" value="${(drugs.drugs.drugsName)!''}" class="form-control"/>
+                                <input name="drugsId" type="text" value="${(drugs.drugs.drugsId)!''}" hidden="hidden"/>
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label>
+                                    <span id="ctl00_cphMain_Label2">价格</span>
+                                </label>
+                                <input name="drugsPrice" type="text" value="${(drugs.drugs.drugsPrice)!''}"
+                                       style="background-color:#fff;" class="form-control"/>
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label>
+                                    <span id="ctl00_cphMain_Label2">说明</span>
+                                </label>
+                                <input name="drugsRemark" type="text" value="${(drugs.drugs.drugsRemark)!''}"
+                                       style="background-color:#fff;" class="form-control"/>
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label>
+                                    <span id="ctl00_cphMain_Label2">图片</span>
+                                </label>
+                                <input name="drugsPicture" type="text" value="${(drugs.drugs.drugsPicture)!''}"
+                                       style="background-color:#fff;" class="form-control"/>
                             </div>
                             <div class="col-md-6 form-group">
                                 <label>

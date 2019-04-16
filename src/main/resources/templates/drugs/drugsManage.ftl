@@ -39,11 +39,11 @@
 </style>
 <div class="row" style="padding-top: 10px;">
     <div class="col-md-2">
-        <h1 style="font-size: 24px; margin: 0;" class="">品牌管理</h1>
+        <h1 style="font-size: 24px; margin: 0;" class="">药品管理</h1>
     </div>
     <div class="col-md-10 text-right">
         <a href="##"><span class="glyphicon glyphicon-home"></span> 首页</a> > <a
-            disabled="disabled">品牌管理</a>
+            disabled="disabled">药品管理</a>
     </div>
 </div>
 <div class="row" style="padding-top: 15px;">
@@ -53,7 +53,7 @@
             <!--盒子头-->
             <div class="box-header">
                 <h3 class="box-title">
-                    <a href="/brandEdit" class="label label-success" style="padding: 5px;">
+                    <a href="/findDrugsById" class="label label-success" style="padding: 5px;">
                         <span class="glyphicon glyphicon-plus"></span> 新增
                     </a>
                 </h3>
@@ -74,24 +74,34 @@
                     <table class="table table-hover ">
                         <tr>
 
-                            <th scope="col">品牌名称</th>
-                            <th scope="col">品牌成立年限</th>
-                            <th scope="col">品牌评价</th>
+                            <th scope="col">药品名称</th>
+                            <th scope="col">药品类别</th>
+                            <th scope="col">价格</th>
+                            <th scope="col">说明</th>
+                            <th scope="col">图片</th>
+                            <th scope="col">销售人员</th>
                             <th scope="col">操作</th>
                         </tr>
-						<#list brandlist as item>
+						<#list drgusVOSList as item>
 						<tr>
-                            <td><span>${item.brandName}</span></td>
-							<#if item.brandYeaes??>
-								<td><span>${item.brandYeaes}</span></td>
-                            <#else>
-								 <td><span>0</span></td>
-                            </#if>
-                            <td><span>${item.brandComment}</span></td>
+                            <td><span>${(item.drugs.drugsName)!''}</span></td>
+                            <td><span>${(item.drugCate.cateName)!''}</span></td>
+                            <td><span>${(item.drugs.drugsPrice)!''}</span></td>
+                            <td><span>${(item.drugs.drugsRemark)!''}</span></td>
+                            <td><span>${(item.drugs.drugsPicture)!''}</span></td>
+                            <td><span>${(item.userName)!''}</span></td>
+							<#--<#if item.brandYeaes??>-->
+								<#--<td><span>${item.brandYeaes}</span></td>-->
+                            <#--<#else>-->
+								 <#--<td><span>0</span></td>-->
+                            <#--</#if>-->
+                            <#--<td><span>${item.brandComment}</span></td>-->
                             <td>
-                                <a href="/brandEdit?brandId=${item.brandId}" class="label xiugai">
+                                <a href="/goDrugsDetail?drugsId=${item.drugs.drugsId}" class="label xiugai">
+                                    <span class="glyphicon glyphicon-edit"></span> 查看</a>
+                                <a href="/findDrugsById?drugsId=${item.drugs.drugsId}" class="label xiugai">
                                     <span class="glyphicon glyphicon-edit"></span> 修改</a>
-                                <a href="/removeBrand?brandId=${item.brandId}" onclick="{return confirm('删除该记录将不能恢复，确定删除吗？');};"
+                                <a href="/deleteDrugsById?drugsId=${item.drugs.drugsId}" onclick="{return confirm('删除该记录将不能恢复，确定删除吗？');};"
                                    class="label shanchu"><span
                                         class="glyphicon glyphicon-remove"></span> 删除</a></td>
                         </tr>

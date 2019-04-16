@@ -97,7 +97,7 @@
                                 <label>
                                     <span id="ctl00_cphMain_Label2">录入人员</span>
                                 </label>
-                                <input name="userId" type="text" value="${(user.userName)!''}"
+                                <input name="createUserid" type="text" value="${(user.userName)!''}"
                                        style="background-color:#fff;" class="form-control" readonly/>
                             </div>
 

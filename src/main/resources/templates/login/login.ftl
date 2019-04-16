@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <link href="images/favicon1.ico" rel="icon" type="image/x-icon"/>
 <link href="images/favicon1.ico" rel="shortcut icon" type="image/x-icon"/>
-<title>汽车租赁</title>
+<title>药品管理系统</title>
 <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
 <link rel="stylesheet" href="css/login.css">
  <style>
@@ -126,13 +126,13 @@
 				</div>
 		    <br>
        <button class="btn_login btn" type="submit" >LOGIN</button>
-            <a href="/goRegister" style="margin: 31px;font-size: 16px;">
-                <span class="glyphicon glyphicon-edit"></span> REGISTER</a>
+            <#--<a href="/goRegister" style="margin: 31px;font-size: 16px;">-->
+                <#--<span class="glyphicon glyphicon-edit"></span> REGISTER</a>-->
         </div>
         </form>
       </div>
      <div style="border: 1px solid transparent;">
-      	<p style="margin-top: 550px;font-weight: 400;color: #757575;font-size: 22px;letter-spacing:1px ;">欢迎来到汽车租赁</p>
+      	<p style="margin-top: 550px;font-weight: 400;color: #757575;font-size: 22px;letter-spacing:1px ;">欢迎来到药品管理系统</p>
       </div>
     </div>
     

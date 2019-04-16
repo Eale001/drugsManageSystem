@@ -64,30 +64,23 @@
 
                             <div class="col-md-6 form-group">
                                 <label>
-                                    <span id="ctl00_cphMain_Label1">出库数量</span>
+                                    <span id="ctl00_cphMain_Label1">销售数量</span>
                                 </label>
                                 <input name="saleinfoNumber" type="text" value="${(drugSaleInfo.drugSaleInfo.saleinfoNumber)!''}" class="form-control"/>
-                                <input name="deliveryinfoId" type="text" value="${(drugs.data.deliveryinfoId)!''}" hidden="hidden"/>
+                                <input name="saleinfoId" type="text" value="${(drugSaleInfo.drugSaleInfo.saleinfoId)!''}" hidden="hidden"/>
                             </div>
                             <div class="col-md-6 form-group">
                                 <label>
-                                    <span id="ctl00_cphMain_Label2">出库价格</span>
+                                    <span id="ctl00_cphMain_Label2">销售价格</span>
                                 </label>
-                                <input name="deliveryinfoPrice" type="text" value="${(drugs.data.deliveryinfoPrice)!''}"
+                                <input name="saleinfoPrice" type="text" value="${(drugSaleInfo.drugSaleInfo.saleinfoPrice)!''}"
                                        style="background-color:#fff;" class="form-control"/>
                             </div>
                             <div class="col-md-6 form-group">
                                 <label>
-                                    <span id="ctl00_cphMain_Label2">备注</span>
+                                    <span id="ctl00_cphMain_Label2">销售人员</span>
                                 </label>
-                                <input name="deliveryinfoRemark" type="text" value="${(drugs.data.deliveryinfoRemark)!''}"
-                                       style="background-color:#fff;" class="form-control"/>
-                            </div>
-                            <div class="col-md-6 form-group">
-                                <label>
-                                    <span id="ctl00_cphMain_Label2">录入人员</span>
-                                </label>
-                                <input name="userId" type="text" value="${(user.userName)!''}"
+                                <input name="saleUserid" type="text" value="${(user.userName)!''}"
                                        style="background-color:#fff;" class="form-control" readonly/>
                             </div>
 
