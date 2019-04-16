@@ -53,7 +53,7 @@
             <!--盒子头-->
             <div class="box-header">
                 <h3 class="box-title">
-                    <a href="/findDrugCateById" class="label label-success" style="padding: 5px;">
+                    <a href="/findDrugDeliveryInfoById" class="label label-success" style="padding: 5px;">
                         <span class="glyphicon glyphicon-plus"></span> 新增
                     </a>
                 </h3>

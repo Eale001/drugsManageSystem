@@ -9,10 +9,7 @@ import com.eale.drugs.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.sql.Timestamp;
@@ -76,7 +73,7 @@ public class DrugIncomingInfoController {
      * @return
      */
     @RequestMapping(value = "findDrugIncomingInfoById",method = RequestMethod.GET)
-    public String findById(@PathVariable(value = "incominginfoId")Long incominginfoId,Model model, HttpSession session){
+    public String findById(@RequestParam(value = "incominginfoId",required = false)Long incominginfoId, Model model, HttpSession session){
         Long userId =(Long) session.getAttribute("userId");
         User user = userService.findById(userId);
         model.addAttribute("user",user);
@@ -117,6 +114,7 @@ public class DrugIncomingInfoController {
             drugInventoryInfo.setCreateDate(time);
             drugInventoryInfo.setCreateUserid(userId);
             drugInventoryInfoService.saveById(drugInventoryInfo);
+            inventoryInfo = drugInventoryInfoService.findByDrugsId(drugIncomingInfo.getDrugsId());
         }
 
         long number = inventoryInfo.getInventoryinfoNumber() + drugIncomingInfo.getIncominginfoNumber();
@@ -138,7 +136,7 @@ public class DrugIncomingInfoController {
      * @return
      */
     @RequestMapping(value = "deleteDrugIncomingInfoById",method = RequestMethod.GET)
-    public String deleteById(@PathVariable(value = "incominginfoId")Long incominginfoId,Model model) {
+    public String deleteById(@RequestParam(value = "incominginfoId",required = false)Long incominginfoId,Model model) {
         drugIncomingInfoService.deleteById(incominginfoId);
         model.addAttribute("success","操作成功");
         return "/findDrugIncomingInfoById";
@@ -153,7 +151,7 @@ public class DrugIncomingInfoController {
      * @return
      */
     @RequestMapping(value = "goDrugsIncomingInfoDetail",method = RequestMethod.GET)
-    public String  update(@PathVariable(value = "incominginfoId")Long incominginfoId,HttpSession session,Model model) {
+    public String  update(@RequestParam(value = "incominginfoId")Long incominginfoId,HttpSession session,Model model) {
         Long userId =(Long) session.getAttribute("userId");
         User user = userService.findById(userId);
         model.addAttribute("user",user);

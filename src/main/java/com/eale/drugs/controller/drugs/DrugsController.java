@@ -15,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpSession;
 import java.sql.Timestamp;
@@ -66,7 +67,7 @@ public class DrugsController {
      * @return
      */
     @RequestMapping(value = "findDrugsById",method = RequestMethod.GET)
-    public String findById(@PathVariable(value = "drugsId")Long drugsId, Model model, HttpSession session){
+    public String findById(@RequestParam(value = "drugsId",required = false)Long drugsId, Model model, HttpSession session){
         Long userId =(Long) session.getAttribute("userId");
         User user = userService.findById(userId);
         model.addAttribute("user",user);
@@ -111,7 +112,7 @@ public class DrugsController {
      * @return
      */
     @RequestMapping(value = "deleteDrugsById",method = RequestMethod.GET)
-    public String deleteById(@PathVariable(value = "drugsId")Long drugsId,Model model) {
+    public String deleteById(@RequestParam(value = "drugsId")Long drugsId,Model model) {
         drugsService.deleteById(drugsId);
         model.addAttribute("success","删除成功");
         return "/findDrgusAll";
@@ -128,7 +129,7 @@ public class DrugsController {
      * @return
      */
     @RequestMapping(value = "goDrugsDetail",method = RequestMethod.GET)
-    public String update(@PathVariable(value = "drugsId")Long drugsId,HttpSession session, Model model) {
+    public String update(@RequestParam(value = "drugsId")Long drugsId,HttpSession session, Model model) {
         Long userId =(Long) session.getAttribute("userId");
         User user = userService.findById(userId);
         model.addAttribute("user",user);

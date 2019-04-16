@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpSession;
 import java.sql.Timestamp;
@@ -52,7 +53,7 @@ public class DrugCateController {
      * @return
      */
     @RequestMapping(value = "findDrugCateById",method = RequestMethod.GET)
-    public String findById(@PathVariable(value = "cateId")Long cateId,Model model,HttpSession session){
+    public String findById(@RequestParam(value = "cateId",required = false)Long cateId, Model model, HttpSession session){
         if(cateId!=null){
             DrugCate drugcate = drugCateService.findById(cateId);
             Long userId=(Long)session.getAttribute("userId");
@@ -77,14 +78,14 @@ public class DrugCateController {
         Timestamp time=new Timestamp(System.currentTimeMillis());
         drugCate.setCreateDate(time);
         drugCateService.saveById(drugCate);
-        DrugCate cate = drugCateService.findById(drugCate.getCateId());
+//        DrugCate cate = drugCateService.findById(drugCate.getCateId());
 
-        if (null != cate){
-            model.addAttribute("success","操作成功");
-            return "/findDrugCateAll";
-        }
-        model.addAttribute("errormes","操作失败");
-        return "drugs/drugsCateEdit";
+//        if (null != cate){
+        model.addAttribute("success","操作成功");
+        return "/findDrugCateAll";
+//        }
+//        model.addAttribute("errormes","操作失败");
+//        return "drugs/drugsCateEdit";
     }
 
     /**
@@ -93,7 +94,7 @@ public class DrugCateController {
      * @return
      */
     @RequestMapping(value = "deleteDrugCateById",method = RequestMethod.GET)
-    public String deleteById(@PathVariable(value = "cateId")Long cateId,Model model) {
+    public String deleteById(@RequestParam(value = "cateId")Long cateId,Model model) {
         drugCateService.deleteById(cateId);
         model.addAttribute("success","操作成功");
         return "/findDrugCateAll";

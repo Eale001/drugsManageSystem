@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpSession;
 import java.sql.Timestamp;
@@ -69,7 +70,7 @@ public class DrugSaleInfoController {
      * @return
      */
     @RequestMapping(value = "findDrugSaleInfoById",method = RequestMethod.GET)
-    public String findById(@PathVariable(value = "saleinfoId")Long saleinfoId, HttpSession session,Model model){
+    public String findById(@RequestParam(value = "saleinfoId",required = false)Long saleinfoId, HttpSession session, Model model){
         Long userId =(Long) session.getAttribute("userId");
         User user = userService.findById(userId);
         model.addAttribute("user",user);
@@ -104,12 +105,12 @@ public class DrugSaleInfoController {
         DrugInventoryInfo inventoryInfo = drugInventoryInfoService.findByDrugsId(drugSaleInfo.getDrugsId());
         if (null==inventoryInfo){
             model.addAttribute("errorsmess","药品库存不足");
-            return "drugs/drugsSaleInfoEdit";
+            return "/findDrugSaleInfoById";
         }
         long number = inventoryInfo.getInventoryinfoNumber() - drugSaleInfo.getSaleinfoNumber();
         if (number<0){
             model.addAttribute("errorsmess","药品库存不足");
-            return "drugs/drugsSaleInfoEdit";
+            return "/findDrugSaleInfoById";
         }
         inventoryInfo.setInventoryinfoNumber(number);
         drugInventoryInfoService.saveById(inventoryInfo);
@@ -141,7 +142,7 @@ public class DrugSaleInfoController {
      * @return
      */
     @RequestMapping(value = "deleteDrugSaleInfoById",method = RequestMethod.GET)
-    public String deleteById(@PathVariable(value = "saleinfoId")Long saleinfoId,Model model) {
+    public String deleteById(@RequestParam(value = "saleinfoId")Long saleinfoId,Model model) {
         drugSaleInfoService.deleteById(saleinfoId);
         model.addAttribute("seccuss","操作成功");
         return "/findDrugSaleInfoAll";
@@ -156,7 +157,7 @@ public class DrugSaleInfoController {
      * @return
      */
     @RequestMapping(value = "goDrugSaleInfoDetail",method = RequestMethod.GET)
-    public String update(@PathVariable(value = "saleinfoId")Long saleinfoId,HttpSession session,Model model) {
+    public String update(@RequestParam(value = "saleinfoId")Long saleinfoId,HttpSession session,Model model) {
         Long userId =(Long) session.getAttribute("userId");
         User user = userService.findById(userId);
         model.addAttribute("user",user);

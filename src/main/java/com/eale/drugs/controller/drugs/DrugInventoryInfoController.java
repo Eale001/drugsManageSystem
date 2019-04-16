@@ -12,10 +12,7 @@ import com.eale.drugs.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,7 +64,7 @@ public class DrugInventoryInfoController {
      * @return
      */
     @RequestMapping(value = "goDrugsInventoryInfoDetail",method = RequestMethod.GET)
-    public String findById(@PathVariable(value = "inventoryinfoId")Long inventoryinfoId,Model model){
+    public String findById(@RequestParam(value = "inventoryinfoId",required = false)Long inventoryinfoId, Model model){
         DrugInventoryInfo drugInventoryInfo = drugInventoryInfoService.findById(inventoryinfoId);
         DrgusVO drgusVO = new DrgusVO();
         Drugs drugs = drugsService.findById(drugInventoryInfo.getDrugsId());
@@ -99,7 +96,7 @@ public class DrugInventoryInfoController {
      * @return
      */
     @RequestMapping(value = "deleteDrugInventoryInfoById",method = RequestMethod.GET)
-    public ResultVO deleteById(@PathVariable(value = "inventoryinfoId")Long inventoryinfoId) {
+    public ResultVO deleteById(@RequestParam(value = "inventoryinfoId")Long inventoryinfoId) {
         drugInventoryInfoService.deleteById(inventoryinfoId);
         return new ResultVO(ResultEnum.SUCCESS.getCode(),"删除成功");
     }

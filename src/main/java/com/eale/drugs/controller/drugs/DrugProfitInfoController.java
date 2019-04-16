@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -29,7 +30,7 @@ public class DrugProfitInfoController {
      * @return
      */
     @RequestMapping(value = "findDrugProfitInfoById",method = RequestMethod.GET)
-    public ResultVO findById(@PathVariable(value = "profitinfoId")Long profitinfoId){
+    public ResultVO findById(@RequestParam(value = "profitinfoId")Long profitinfoId){
         DrugProfitInfo drugProfitInfo = drugProfitInfoService.findById(profitinfoId);
         return new ResultVO(ResultEnum.SUCCESS.getCode(),"查询成功",drugProfitInfo);
     }
@@ -55,7 +56,7 @@ public class DrugProfitInfoController {
      * @return
      */
     @RequestMapping(value = "deleteDrugProfitInfoById",method = RequestMethod.GET)
-    public ResultVO deleteById(@PathVariable(value = "profitinfoId")Long profitinfoId) {
+    public ResultVO deleteById(@RequestParam(value = "profitinfoId")Long profitinfoId) {
         drugProfitInfoService.deleteById(profitinfoId);
         return new ResultVO(ResultEnum.SUCCESS.getCode(),"删除成功");
     }
@@ -78,7 +79,7 @@ public class DrugProfitInfoController {
      * @return
      */
     @RequestMapping(value = "updateDrugProfitInfo",method = RequestMethod.POST)
-    public ResultVO update(@PathVariable(value = "profitinfoId")Long profitinfoId, DrugProfitInfo drugProfitInfo) {
+    public ResultVO update(@RequestParam(value = "profitinfoId")Long profitinfoId, DrugProfitInfo drugProfitInfo) {
         DrugProfitInfo drugProfitInfo1 = drugProfitInfoService.findById(profitinfoId);
         if (null == drugProfitInfo1){
             return new ResultVO(ResultEnum.ERROR.getCode(),"数据有误");

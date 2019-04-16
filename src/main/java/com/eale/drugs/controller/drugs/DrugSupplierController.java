@@ -14,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpSession;
 import java.sql.Timestamp;
@@ -56,7 +57,7 @@ public class DrugSupplierController {
      * @return
      */
     @RequestMapping(value = "findDrugSupplierById",method = RequestMethod.GET)
-    public String findById(@PathVariable(value = "supplierId")Long supplierId, HttpSession session,Model model){
+    public String findById(@RequestParam(value = "supplierId",required = false)Long supplierId, HttpSession session, Model model){
         Long userId =(Long) session.getAttribute("userId");
         User user = userService.findById(userId);
         model.addAttribute("user",user);
@@ -64,7 +65,7 @@ public class DrugSupplierController {
             DrugSupplier drugSupplier = drugSupplierService.findById(supplierId);
             model.addAttribute("drugSupplier",drugSupplier);
         }
-        return "drugsSupplierEdit";
+        return "drugs/drugsSupplierEdit";
     }
 
 
@@ -91,7 +92,7 @@ public class DrugSupplierController {
      * @return
      */
     @RequestMapping(value = "deleteDrugSupplierById",method = RequestMethod.GET)
-    public String deleteById(@PathVariable(value = "supplierId")Long supplierId,Model model) {
+    public String deleteById(@RequestParam(value = "supplierId")Long supplierId,Model model) {
         drugSupplierService.deleteById(supplierId);
         model.addAttribute("success","删除成功");
         return "/findDrugSupplierAll";
@@ -106,7 +107,7 @@ public class DrugSupplierController {
      * @return
      */
     @RequestMapping(value = "goDrugsSupplierDetail",method = RequestMethod.GET)
-    public String update(@PathVariable(value = "supplierId")Long supplierId,HttpSession session,Model model) {
+    public String update(@RequestParam(value = "supplierId")Long supplierId,HttpSession session,Model model) {
         Long userId =(Long) session.getAttribute("userId");
         User user = userService.findById(userId);
         model.addAttribute("user",user);

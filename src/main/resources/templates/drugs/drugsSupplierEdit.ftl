@@ -74,7 +74,7 @@
                                 <label>
                                     <span id="ctl00_cphMain_Label2">备注</span>
                                 </label>
-                                <input name="supplierPhone" type="text" value="${(drugSupplier.supplierRemark)!''}"
+                                <input name="supplierRemark" type="text" value="${(drugSupplier.supplierRemark)!''}"
                                        style="background-color:#fff;" class="form-control"/>
                             </div>
                             <div class="col-md-6 form-group">

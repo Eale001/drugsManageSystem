@@ -87,7 +87,7 @@
                                 <label>
                                     <span id="ctl00_cphMain_Label2">供应商</span>
                                 </label>
-                                <select class="form-control" name="drugsId">
+                                <select class="form-control" name="supplierId">
 							        <#list supplierList as supplier>
                                         <option value="${(supplier.supplierId)!''}">${(supplier.supplierName)!''}</option>
                                     </#list>
