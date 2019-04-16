@@ -1,16 +1,21 @@
 package com.eale.drugs.controller.drugs;
 
 
-import com.eale.drugs.bean.DrugSaleInfo;
+import com.eale.drugs.bean.*;
+import com.eale.drugs.common.DrgusVO;
 import com.eale.drugs.common.formValid.ResultEnum;
 import com.eale.drugs.common.formValid.ResultVO;
-import com.eale.drugs.service.DrugSaleInfoService;
+import com.eale.drugs.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import javax.servlet.http.HttpSession;
+import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,31 +28,111 @@ public class DrugSaleInfoController {
     @Autowired
     private DrugSaleInfoService drugSaleInfoService;
 
+    @Autowired
+    private DrugDeliveryInfoService drugDeliveryInfoService;
+
+    @Autowired
+    private DrugInventoryInfoService drugInventoryInfoService;
+
+    @Autowired
+    private DrugsService drugsService;
+
+    @Autowired
+    private UserService userService;
+
 
     /**
-     * 根据Id查询
-     * @param saleinfoId
+     * 进入到 销售 列表
      * @return
      */
-    @RequestMapping(value = "findDrugSaleInfoById",method = RequestMethod.GET)
-    public ResultVO findById(@PathVariable(value = "saleinfoId")Long saleinfoId){
-        DrugSaleInfo drugSaleInfo = drugSaleInfoService.findById(saleinfoId);
-        return new ResultVO(ResultEnum.SUCCESS.getCode(),"查询成功",drugSaleInfo);
+    @RequestMapping(value = "findDrugSaleInfoAll",method = RequestMethod.GET)
+    public String findAll(Model model) {
+        List<DrugSaleInfo> drugSaleInfoList= drugSaleInfoService.findAll();
+        List<DrgusVO> drgusVOSList=new ArrayList<>();
+        for (DrugSaleInfo drugSaleInfo : drugSaleInfoList) {
+            DrgusVO drgusVO= new DrgusVO();
+            Drugs drugs = drugsService.findById(drugSaleInfo.getDrugsId());
+            drgusVO.setDrugs(drugs);
+            drgusVO.setDrugSaleInfo(drugSaleInfo);
+            User user =userService.findById(drugSaleInfo.getSaleUserid());
+            drgusVO.setUserName(user.getUserName());
+            drgusVOSList.add(drgusVO);
+        }
+        model.addAttribute("drgusVOSList",drgusVOSList);
+        return "drugs/drugsSaleInfoManage";
     }
 
 
     /**
-     * 添加
+     * 进入到 增加，修改 页面
+     * @param saleinfoId
+     * @return
+     */
+    @RequestMapping(value = "findDrugSaleInfoById",method = RequestMethod.GET)
+    public String findById(@PathVariable(value = "saleinfoId")Long saleinfoId, HttpSession session,Model model){
+        Long userId =(Long) session.getAttribute("userId");
+        User user = userService.findById(userId);
+        model.addAttribute("user",user);
+        if (null!=saleinfoId){
+            DrugSaleInfo drugSaleInfo = drugSaleInfoService.findById(saleinfoId);
+            Drugs drugs = drugsService.findById(drugSaleInfo.getDrugsId());
+            DrgusVO drgusVO =new DrgusVO();
+            drgusVO.setDrugs(drugs);
+            drgusVO.setDrugSaleInfo(drugSaleInfo);
+            model.addAttribute("drugSaleInfo",drgusVO);
+        }
+        List<Drugs> drugsList = drugsService.findAll();
+        model.addAttribute("drugsList",drugsList);
+        return "drugs/drugsSaleInfoEdit";
+    }
+
+
+    /**
+     *  新增，修改 保存
      * @param drugSaleInfo
      * @return
      */
     @RequestMapping(value ="saveDrugSaleInfo" ,method = RequestMethod.POST)
-    public ResultVO saveById(DrugSaleInfo drugSaleInfo){
-        if (null == drugSaleInfo){
-            return new ResultVO(ResultEnum.ERROR.getCode(),"数据有误");
+    public String saveById(DrugSaleInfo drugSaleInfo,HttpSession session,Model model){
+        System.out.println(drugSaleInfo);
+        Long userId=(Long) session.getAttribute("userId");
+        drugSaleInfo.setSaleUserid(userId);
+        Timestamp time=new Timestamp(System.currentTimeMillis());
+        drugSaleInfo.setSaleDate(time);
+
+        //库存操作
+        DrugInventoryInfo inventoryInfo = drugInventoryInfoService.findByDrugsId(drugSaleInfo.getDrugsId());
+        if (null==inventoryInfo){
+            model.addAttribute("errorsmess","药品库存不足");
+            return "drugs/drugsSaleInfoEdit";
         }
+        long number = inventoryInfo.getInventoryinfoNumber() - drugSaleInfo.getSaleinfoNumber();
+        if (number<0){
+            model.addAttribute("errorsmess","药品库存不足");
+            return "drugs/drugsSaleInfoEdit";
+        }
+        inventoryInfo.setInventoryinfoNumber(number);
+        drugInventoryInfoService.saveById(inventoryInfo);
+
+        //出库操作
+        DrugDeliveryInfo drugDeliveryInfo = new DrugDeliveryInfo();
+        drugDeliveryInfo.setDrugsId(drugSaleInfo.getDrugsId());
+        drugDeliveryInfo.setDeliveryinfoNumber(drugSaleInfo.getSaleinfoNumber());
+        drugDeliveryInfo.setDeliveryinfoPrice(drugSaleInfo.getSaleinfoPrice());
+        drugDeliveryInfo.setCreateUserid(userId);
+        drugDeliveryInfo.setCreateDate(time);
+        drugDeliveryInfoService.saveById(drugDeliveryInfo);
+
+        //上述完成才能保存销售记录
         drugSaleInfoService.saveById(drugSaleInfo);
-        return new ResultVO(ResultEnum.SUCCESS.getCode(),"添加成功");
+
+        /**
+         * 没有加事务
+         */
+//        if (null == drugSaleInfo){
+//            return new ResultVO(ResultEnum.ERROR.getCode(),"数据有误");
+//        }
+        return "/findDrugSaleInfoAll";
     }
 
     /**
@@ -56,36 +141,34 @@ public class DrugSaleInfoController {
      * @return
      */
     @RequestMapping(value = "deleteDrugSaleInfoById",method = RequestMethod.GET)
-    public ResultVO deleteById(@PathVariable(value = "saleinfoId")Long saleinfoId) {
+    public String deleteById(@PathVariable(value = "saleinfoId")Long saleinfoId,Model model) {
         drugSaleInfoService.deleteById(saleinfoId);
-        return new ResultVO(ResultEnum.SUCCESS.getCode(),"删除成功");
-    }
-
-    /**
-     * 查询全部
-     * @return
-     */
-    @RequestMapping(value = "findDrugSaleInfoAll",method = RequestMethod.GET)
-    public ResultVO findAll() {
-        List<DrugSaleInfo> drugSaleInfoList= drugSaleInfoService.findAll();
-        return new ResultVO(ResultEnum.SUCCESS.getCode(),"查询成功",drugSaleInfoList);
+        model.addAttribute("seccuss","操作成功");
+        return "/findDrugSaleInfoAll";
     }
 
 
+
     /**
-     * 修改
+     * 查看详情
      * @param saleinfoId
-     * @param drugSaleInfo
+     * @param model
      * @return
      */
-    @RequestMapping(value = "updateDrugSaleInfo",method = RequestMethod.POST)
-    public ResultVO update(@PathVariable(value = "saleinfoId")Long saleinfoId, DrugSaleInfo drugSaleInfo) {
-        DrugSaleInfo drugSaleInfo1 = drugSaleInfoService.findById(saleinfoId);
-        if (null == drugSaleInfo1){
-            return new ResultVO(ResultEnum.ERROR.getCode(),"数据有误");
-        }
-        DrugSaleInfo drugSaleInfo2 = drugSaleInfoService.update(drugSaleInfo);
-        return new ResultVO(ResultEnum.SUCCESS.getCode(),"修改成功",drugSaleInfo2);
+    @RequestMapping(value = "goDrugSaleInfoDetail",method = RequestMethod.GET)
+    public String update(@PathVariable(value = "saleinfoId")Long saleinfoId,HttpSession session,Model model) {
+        Long userId =(Long) session.getAttribute("userId");
+        User user = userService.findById(userId);
+        model.addAttribute("user",user);
+
+        DrugSaleInfo drugSaleInfo = drugSaleInfoService.findById(saleinfoId);
+        Drugs drugs = drugsService.findById(drugSaleInfo.getDrugsId());
+        DrgusVO drgusVO =new DrgusVO();
+        drgusVO.setDrugs(drugs);
+        drgusVO.setDrugSaleInfo(drugSaleInfo);
+        model.addAttribute("drugSaleInfo",drgusVO);
+
+        return "drugs/drugsSaleInfoDetail";
     }
 
 }

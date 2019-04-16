@@ -42,4 +42,9 @@ public class DrugInventoryInfoServiceImpl implements DrugInventoryInfoService{
         drugInventoryInfoDao.save(drugInventoryInfo);
         return drugInventoryInfoDao.findById(drugInventoryInfo.getDrugsId()).get();
     }
+
+    @Override
+    public DrugInventoryInfo findByDrugsId(Long drugsId) {
+        return drugInventoryInfoDao.findByDrugsId(drugsId);
+    }
 }

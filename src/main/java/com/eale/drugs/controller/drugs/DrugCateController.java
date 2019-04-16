@@ -105,7 +105,7 @@ public class DrugCateController {
      * @param model
      * @return
      */
-    @RequestMapping(value = "goDetail",method = RequestMethod.GET)
+    @RequestMapping(value = "goDrugCateDetail",method = RequestMethod.GET)
     public String goDetail(Long cateId,Model model,HttpSession session){
         Long userId=(Long)session.getAttribute("userId");
         User user = userService.findById(userId);

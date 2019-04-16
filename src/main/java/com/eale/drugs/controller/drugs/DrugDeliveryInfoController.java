@@ -1,10 +1,10 @@
 package com.eale.drugs.controller.drugs;
 
 import com.eale.drugs.bean.DrugDeliveryInfo;
+import com.eale.drugs.bean.DrugInventoryInfo;
 import com.eale.drugs.bean.Drugs;
 import com.eale.drugs.bean.User;
-import com.eale.drugs.common.formValid.ResultEnum;
-import com.eale.drugs.common.formValid.ResultVO;
+import com.eale.drugs.common.DrgusVO;
 import com.eale.drugs.service.DrugDeliveryInfoService;
 import com.eale.drugs.service.DrugInventoryInfoService;
 import com.eale.drugs.service.DrugsService;
@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
+import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -44,12 +46,21 @@ public class DrugDeliveryInfoController {
      * 进入出库管理列表
      * @return
      */
-    @ResponseBody
     @RequestMapping(value = "findDrugDeliveryInfoAll",method = RequestMethod.GET)
     public String findAll(Model model) {
         List<DrugDeliveryInfo> drugDeliveryInfoList= drugDeliveryInfoService.findAll();
-        model.addAttribute("drugDeliveryInfoList",drugDeliveryInfoList);
-        return "drugs/drugDeliveryInfoManage";
+        List<DrgusVO> drgusVOSList=new ArrayList<>();
+        for (DrugDeliveryInfo drugDeliveryInfo: drugDeliveryInfoList) {
+            DrgusVO drgusVO= new DrgusVO();
+            Drugs drugs = drugsService.findById(drugDeliveryInfo.getDrugsId());
+            drgusVO.setDrugs(drugs);
+            drgusVO.setData(drugDeliveryInfo);
+            User user =userService.findById(drugDeliveryInfo.getCreateUserid());
+            drgusVO.setUserName(user.getUserName());
+            drgusVOSList.add(drgusVO);
+        }
+        model.addAttribute("drugDeliveryInfoList",drgusVOSList);
+        return "drugs/drugsDeliveryInfoManage";
     }
 
 
@@ -59,16 +70,21 @@ public class DrugDeliveryInfoController {
      * @return
      */
     @RequestMapping(value = "findDrugDeliveryInfoById",method = RequestMethod.GET)
-    public String findById(@PathVariable(value = "deliveryinfoId")Long deliveryinfoId,Model model){
+    public String findById(@PathVariable(value = "deliveryinfoId")Long deliveryinfoId,Model model,HttpSession session){
+        Long userId =(Long) session.getAttribute("userId");
+        User user = userService.findById(userId);
+        model.addAttribute("user",user);
         if (deliveryinfoId!=null){
             DrugDeliveryInfo drugDeliveryInfo = drugDeliveryInfoService.findById(deliveryinfoId);
             Drugs drugs = drugsService.findById(drugDeliveryInfo.getDrugsId());
-            model.addAttribute("drugDeliveryInfo",drugDeliveryInfo);
-            model.addAttribute("drugs",drugs);
+            DrgusVO drgusVO =new DrgusVO();
+            drgusVO.setDrugs(drugs);
+            drgusVO.setData(drugDeliveryInfo);
+            model.addAttribute("drugs",drgusVO);
         }
-        List<DrugDeliveryInfo> drugDeliveryInfoList = drugDeliveryInfoService.findAll();
-        model.addAttribute("drugDeliveryInfoList",drugDeliveryInfoList);
-        return "drugs/drugDeliveryInfoEdit";
+        List<Drugs> drugsList = drugsService.findAll();
+        model.addAttribute("drugsList",drugsList);
+        return "drugs/drugsDeliveryInfoEdit";
     }
 
 
@@ -80,18 +96,33 @@ public class DrugDeliveryInfoController {
      * @return
      */
     @RequestMapping(value ="saveDrugDeliveryInfo" ,method = RequestMethod.POST)
-    public ResultVO save(DrugDeliveryInfo drugDeliveryInfo, Model model, HttpSession session){
+    public String save(DrugDeliveryInfo drugDeliveryInfo, Model model, HttpSession session){
 
         System.out.println(drugDeliveryInfo);
         Long userId=(Long) session.getAttribute("userId");
+        drugDeliveryInfo.setCreateUserid(userId);
+        Timestamp time=new Timestamp(System.currentTimeMillis());
+        drugDeliveryInfo.setCreateDate(time);
 
-
-
-        if (null == drugDeliveryInfo){
-            return new ResultVO(ResultEnum.ERROR.getCode(),"数据有误");
+        DrugInventoryInfo drugInventoryInfo = drugInventoryInfoService.findByDrugsId(drugDeliveryInfo.getDrugsId());
+        if (null == drugInventoryInfo){
+            model.addAttribute("errorsmess","药品库存不足");
+            return "drugs/drugsDeliveryInfoEdit";
         }
+
+        long number=drugInventoryInfo.getInventoryinfoNumber()-drugDeliveryInfo.getDeliveryinfoNumber();
+        drugInventoryInfo.setInventoryinfoNumber(number);
+        drugInventoryInfoService.saveById(drugInventoryInfo);
         drugDeliveryInfoService.saveById(drugDeliveryInfo);
-        return new ResultVO(ResultEnum.SUCCESS.getCode(),"添加成功");
+
+
+//        DrugDeliveryInfo byId = drugDeliveryInfoService.findById(drugDeliveryInfo.getDeliveryinfoId());
+//        if (null == byId){
+//            model.addAttribute("errormess","操作失败");
+//            return "drugs/drugDeliveryInfoEdit";
+//        }
+        model.addAttribute("seccess","操作成功");
+        return "/findDrugDeliveryInfoAll";
     }
 
     /**
@@ -100,28 +131,30 @@ public class DrugDeliveryInfoController {
      * @return
      */
     @RequestMapping(value = "deleteDrugDeliveryInfoById",method = RequestMethod.GET)
-    public ResultVO deleteById(@PathVariable(value = "drugsId")Long drugsId) {
+    public String deleteById(@PathVariable(value = "drugsId")Long drugsId,Model model) {
         drugDeliveryInfoService.deleteById(drugsId);
-        return new ResultVO(ResultEnum.SUCCESS.getCode(),"删除成功");
+        model.addAttribute("success","操作成功");
+        return "/findDrugDeliveryInfoAll";
     }
 
 
-
-
     /**
-     * 修改
+     * 查询 ，根据ID查询
      * @param deliveryinfoId
-     * @param drugDeliveryInfo
      * @return
      */
-    @RequestMapping(value = "updateDrugDeliveryInfo",method = RequestMethod.POST)
-    public ResultVO update(@PathVariable(value = "deliveryinfoId")Long deliveryinfoId, DrugDeliveryInfo drugDeliveryInfo) {
-        DrugDeliveryInfo drugDeliveryInfo1 = drugDeliveryInfoService.findById(deliveryinfoId);
-        if (null == drugDeliveryInfo1){
-            return new ResultVO(ResultEnum.ERROR.getCode(),"数据有误");
-        }
-        DrugDeliveryInfo drugDeliveryInfo2 = drugDeliveryInfoService.update(drugDeliveryInfo);
-        return new ResultVO(ResultEnum.SUCCESS.getCode(),"修改成功",drugDeliveryInfo2);
+    @RequestMapping(value = "goDrugDeliveryInfoDetail",method = RequestMethod.GET)
+    public String update(@PathVariable(value = "deliveryinfoId")Long deliveryinfoId,HttpSession session,Model model) {
+        Long userId =(Long) session.getAttribute("userId");
+        User user = userService.findById(userId);
+        model.addAttribute("user",user);
+        DrugDeliveryInfo drugDeliveryInfo = drugDeliveryInfoService.findById(deliveryinfoId);
+        Drugs drugs = drugsService.findById(drugDeliveryInfo.getDrugsId());
+        DrgusVO drgusVO =new DrgusVO();
+        drgusVO.setDrugs(drugs);
+        drgusVO.setData(drugDeliveryInfo);
+        model.addAttribute("drugs",drgusVO);
+        return "drugs/drugsDeliveryInfoDetail";
     }
 
 }

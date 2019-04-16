@@ -42,4 +42,11 @@ public interface DrugInventoryInfoService {
      * @return
      */
     DrugInventoryInfo update(DrugInventoryInfo drugInventoryInfo);
+
+    /**
+     * 根据药品查询
+     * @param drugsId
+     * @return
+     */
+    DrugInventoryInfo findByDrugsId(Long drugsId);
 }
